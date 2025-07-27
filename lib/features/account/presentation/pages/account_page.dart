@@ -4,14 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bankapp3/features/account/presentation/bloc/accountuser_bloc.dart';
 import 'package:bankapp3/features/account/presentation/widgets/user_account_info_widget.dart';
+import 'package:bankapp3/features/twofactorauthfeature/presentation/bloc/twofactorauthfeature_bloc.dart';
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AccountuserBloc>(
-      create: (context) => sl<AccountuserBloc>()..add(GetAccountInfoEvent()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AccountuserBloc>(
+          create: (context) => sl<AccountuserBloc>()..add(GetAccountInfoEvent()),
+        ),
+        BlocProvider<TwofactorauthfeatureBloc>(
+          create: (context) => sl<TwofactorauthfeatureBloc>(),
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           title: const Text(

@@ -33,7 +33,6 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     on<SignupWithPasskeySubmitted>(_onSignupWithPasskeySubmitted);
   }
 
-  // Helper: Convert BigInt to bytes
   List<int> bigIntToBytes(BigInt bigInt) {
     final hex = bigInt.toRadixString(16).padLeft(256, '0');
     final bytes = <int>[];
@@ -44,7 +43,6 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     return bytes;
   }
 
-  // Helper: Chunk string
   List<String> _chunk(String str, int size) {
     final chunks = <String>[];
     for (var i = 0; i < str.length; i += size) {
@@ -54,14 +52,13 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     return chunks;
   }
 
-  // Encode private key to PEM (PKCS#1)
   String encodePrivateKeyToPemPKCS1(RSAPrivateKey privateKey) {
     final topLevel =
         ASN1Sequence()
-          ..add(ASN1Integer(BigInt.zero)) // version
-          ..add(ASN1Integer(privateKey.n!)) // modulus
-          ..add(ASN1Integer(BigInt.parse('65537'))) // publicExponent (e)
-          ..add(ASN1Integer(privateKey.exponent!)) // privateExponent (d)
+          ..add(ASN1Integer(BigInt.zero))
+          ..add(ASN1Integer(privateKey.n!))
+          ..add(ASN1Integer(BigInt.parse('65537')))
+          ..add(ASN1Integer(privateKey.exponent!))
           ..add(ASN1Integer(privateKey.p!))
           ..add(ASN1Integer(privateKey.q!))
           ..add(
@@ -78,7 +75,6 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     return '-----BEGIN RSA PRIVATE KEY-----\n$formattedPem\n-----END RSA PRIVATE KEY-----';
   }
 
-  // Encode public key to PEM (SPKI format)
   String encodePublicKeyToPemPKCS1(RSAPublicKey publicKey) {
     final sequence =
         ASN1Sequence()
@@ -88,9 +84,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         ASN1Sequence()
           ..add(
             ASN1Sequence()
-              ..add(
-                ASN1ObjectIdentifier([1, 2, 840, 113549, 1, 1, 1]),
-              ) // RSA OID
+              ..add(ASN1ObjectIdentifier([1, 2, 840, 113549, 1, 1, 1]))
               ..add(ASN1Null()),
           )
           ..add(ASN1BitString(sequence.encodedBytes));
@@ -100,7 +94,6 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     return '-----BEGIN PUBLIC KEY-----\n$formattedPem\n-----END PUBLIC KEY-----';
   }
 
-  // Main Signup Logic
   Future<void> _onSignupWithPasskeySubmitted(
     SignupWithPasskeySubmitted event,
     Emitter<SignupState> emit,
@@ -114,19 +107,16 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         return;
       }
 
-      // طلب المصادقة البيومترية وينتظر النتيجة (await مهم جداً)
       final bool authenticated = await localAuth.authenticate(
         localizedReason: 'قم بالمصادقة للتسجيل باستخدام Passkey',
         options: const AuthenticationOptions(biometricOnly: true),
       );
 
-      // إذا المصادقة فشلت نرجع خطأ
       if (!authenticated) {
         emit(SignupError('فشلت المصادقة البيومترية'));
         return;
       }
 
-      // Generate key pair
       final secureRandom = FortunaRandom();
       final seedSource = Random.secure();
       secureRandom.seed(
@@ -147,13 +137,10 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       final publicKey = keyPair.publicKey as RSAPublicKey;
       final privateKey = keyPair.privateKey as RSAPrivateKey;
 
-      // Encode public key to PEM
       final publicKeyPem = encodePublicKeyToPemPKCS1(publicKey);
 
-      // Encode private key
       final privateKeyPem = encodePrivateKeyToPemPKCS1(privateKey);
 
-      // Validate key parsing
       try {
         final asn1Parser = ASN1Parser(
           base64Decode(
@@ -178,7 +165,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         username: event.username,
         email: event.email,
         phoneNumber: event.phoneNumber,
-        publicKey: publicKeyPem, // Send PEM instead of modulus
+        publicKey: publicKeyPem,
       );
 
       await result.fold(

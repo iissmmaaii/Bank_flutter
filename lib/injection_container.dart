@@ -31,6 +31,12 @@ import 'package:bankapp3/features/auth/domain/usecases/signup_usecase.dart';
 import 'package:bankapp3/features/auth/presentation/bloc/bloc/login_bloc.dart';
 import 'package:bankapp3/features/auth/presentation/bloc/signin/signup_bloc.dart';
 import 'package:bankapp3/core/error/network/network_info.dart';
+import 'package:bankapp3/features/twofactorauthfeature/data/datasource/authenticator_remote_data_source.dart';
+import 'package:bankapp3/features/twofactorauthfeature/data/reposittories/authenticatorrepositryimpl.dart';
+import 'package:bankapp3/features/twofactorauthfeature/domain/repositres/authenticatorrepository.dart';
+import 'package:bankapp3/features/twofactorauthfeature/domain/usecase/getsecretusecase.dart';
+import 'package:bankapp3/features/twofactorauthfeature/domain/usecase/verifyotpusecase.dart';
+import 'package:bankapp3/features/twofactorauthfeature/presentation/bloc/twofactorauthfeature_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:local_auth/local_auth.dart';
@@ -131,12 +137,12 @@ Future<void> init() async {
   );
   sl.registerLazySingleton(() => RejectPayment(sl()));
 
-  // Notification Local Data Source ✅ (المهم)
+  // Notification Local Data Source
   sl.registerLazySingleton<NotificationLocalDataSource>(
     () => NotificationLocalDataSourceImpl.instance,
   );
 
-  // Notification Repository ✅
+  // Notification Repository
   sl.registerLazySingleton<NotificationRepository>(
     () => NotificationRepositoryImpl(localDataSource: sl()),
   );
@@ -148,4 +154,28 @@ Future<void> init() async {
 
   // Notification Bloc
   sl.registerLazySingleton(() => NotificationBloc(sl(), sl(), sl()));
+
+  // Two Factor Auth Data Source
+  sl.registerLazySingleton<AuthenticatorRemoteDataSource>(
+    () => AuthenticatorRemoteDataSourceImpl(client: sl()),
+  );
+
+  // Two Factor Auth Repository
+  sl.registerLazySingleton<AuthenticatorRepository>(
+    () => AuthenticatorRepositoryImpl(remoteDataSource: sl()),
+  );
+
+  // Two Factor Auth Use Cases
+  sl.registerLazySingleton(() => Getsecretusecase(repository: sl()));
+  sl.registerLazySingleton(() => VerifyOtpUsecase(repository: sl()));
+
+  // Two Factor Auth Bloc
+  sl.registerFactory(
+    () => TwofactorauthfeatureBloc(
+      getSecretUsecase: sl(),
+      verifyOtpUsecase: sl(),
+      localAuth: sl(),
+      localDataSource: sl(),
+    ),
+  );
 }

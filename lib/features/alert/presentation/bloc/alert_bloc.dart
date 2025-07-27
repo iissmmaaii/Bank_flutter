@@ -17,7 +17,7 @@ class AlertBloc extends Bloc<AlertEvent, AlertState> {
     on<PaymentRejected>(_paymentrejected);
   }
   Future<void> _paymentapproved(
-    PaymentApproved event, // 👈 النوع الصحيح هون
+    PaymentApproved event, 
     Emitter<AlertState> emit,
   ) async {
     emit(PaymentProcessing());

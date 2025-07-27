@@ -27,7 +27,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
       appBar: AppBar(title: const Text('الإشعارات')),
       body: MultiBlocProvider(
         providers: [
-          // فقط نوفر AlertBloc لأن NotificationBloc موجود مسبقاً في الـ context
           BlocProvider(create: (_) => sl<AlertBloc>()),
         ],
         child: BlocBuilder<NotificationBloc, NotificationState>(

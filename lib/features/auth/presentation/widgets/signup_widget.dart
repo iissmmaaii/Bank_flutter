@@ -47,7 +47,6 @@ class _SignupFormState extends State<SignupForm> {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
           child: Column(
             children: [
-              // شعار البنك
               const Icon(
                 Icons.account_balance,
                 size: 80,
@@ -59,7 +58,6 @@ class _SignupFormState extends State<SignupForm> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 32),
-
               Form(
                 key: _formKey,
                 child: Column(
@@ -118,6 +116,15 @@ class _SignupFormState extends State<SignupForm> {
                         Navigator.pushNamed(context, '/login');
                       },
                       child: const Text('لديك حساب؟ تسجيل الدخول'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/recover',
+                        ); // ⬅️ يذهب إلى صفحة التحقق
+                      },
+                      child: const Text('استرداد حساب'),
                     ),
                   ],
                 ),
