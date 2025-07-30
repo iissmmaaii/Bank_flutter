@@ -1,3 +1,4 @@
+import 'package:bankapp3/core/network/http_headers_provider.dart';
 import 'package:bankapp3/features/account/data/datasource/accountlocaldatasource.dart';
 import 'package:bankapp3/features/account/data/datasource/accountremotedatasource.dart';
 import 'package:bankapp3/features/account/data/repositories/accountrepositoryimp.dart';
@@ -72,6 +73,9 @@ Future<void> init() async {
   sl.registerLazySingleton(() => LoginStartUseCase(sl()));
   sl.registerLazySingleton(() => LoginFinishUseCase(sl()));
   sl.registerLazySingleton(() => SignupUseCase(sl()));
+  sl.registerLazySingleton<HttpHeadersProvider>(
+    () => HttpHeadersProvider(authLocalDataSource: sl()),
+  );
 
   // Auth Blocs
   sl.registerFactory(
@@ -98,7 +102,7 @@ Future<void> init() async {
     () => Accountlocaldatasource(storage: sl()),
   );
   sl.registerLazySingleton<AccountRemoteDataSource>(
-    () => AccountRemoteDataSource(client: sl()),
+    () => AccountRemoteDataSource(client: sl(), headersProvider: sl()),
   );
 
   // Account Repository
@@ -128,7 +132,7 @@ Future<void> init() async {
     () => PaymentRepositoryImpl(sl()),
   );
   sl.registerLazySingleton<Paymetremotedatasource>(
-    () => Paymetremotedatasource(client: sl()),
+    () => Paymetremotedatasource(client: sl(), headersProvider: sl()),
   );
 
   // Payment UseCases
@@ -157,7 +161,8 @@ Future<void> init() async {
 
   // Two Factor Auth Data Source
   sl.registerLazySingleton<AuthenticatorRemoteDataSource>(
-    () => AuthenticatorRemoteDataSourceImpl(client: sl()),
+    () =>
+        AuthenticatorRemoteDataSourceImpl(client: sl(), headersProvider: sl()),
   );
 
   // Two Factor Auth Repository

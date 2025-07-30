@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("dev.flutter.flutter-gradle-plugin")
-    id("com.google.gms.google-services") // ✅ مضاف حديثًا
+    id("com.google.gms.google-services") // ✅ Firebase
 }
 
 android {
@@ -11,8 +11,10 @@ android {
     compileSdk = flutter.compileSdkVersion
 
     compileOptions {
+        // ✅ مطلوب لتفعيل Java 8 features
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -41,4 +43,8 @@ flutter {
 dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.16.0"))
     implementation("com.google.firebase:firebase-messaging")
+
+    // تحديث النسخة إلى 2.1.4 أو أحدث
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }
+

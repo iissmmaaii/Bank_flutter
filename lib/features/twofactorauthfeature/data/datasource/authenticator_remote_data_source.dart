@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:bankapp3/features/auth/domain/entities/user.dart';
 import 'package:bankapp3/features/twofactorauthfeature/domain/entities/authenticatorsecret.dart';
+import 'package:bankapp3/core/network/http_headers_provider.dart'; // استيراد مزود الهيدرز
 
 abstract class AuthenticatorRemoteDataSource {
   Future<AuthenticatorSecret> getSecret(String email);
@@ -16,16 +17,21 @@ abstract class AuthenticatorRemoteDataSource {
 class AuthenticatorRemoteDataSourceImpl
     implements AuthenticatorRemoteDataSource {
   final http.Client client;
+  final HttpHeadersProvider headersProvider; // أضفنا هنا
   final String baseUrl = 'http://192.168.11.198:3001';
 
-  AuthenticatorRemoteDataSourceImpl({required this.client});
+  AuthenticatorRemoteDataSourceImpl({
+    required this.client,
+    required this.headersProvider, // استقبلناه في الكونستركتور
+  });
 
   @override
   Future<AuthenticatorSecret> getSecret(String email) async {
     try {
+      final headers = await headersProvider.getAuthHeaders(); // جلب الهيدرز
       final response = await client.post(
         Uri.parse('$baseUrl/2fa/secret'),
-        headers: {'Content-Type': 'application/json'},
+        headers: headers,
         body: jsonEncode({'email': email}),
       );
 
@@ -47,7 +53,6 @@ class AuthenticatorRemoteDataSourceImpl
     }
   }
 
-  @override
   Future<User> verifyOtp({
     required String otp,
     required String email,
