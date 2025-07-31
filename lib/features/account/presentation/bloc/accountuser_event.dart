@@ -23,11 +23,9 @@ class ChangeNumberEvent extends AccountuserEvent {
   ChangeNumberEvent({required this.userId, required this.newNumber});
 }
 
-class ChargeAnotherAccountEvent extends AccountuserEvent {
-  final String fromAccount;
-  final String toAccount;
-  ChargeAnotherAccountEvent({
-    required this.fromAccount,
-    required this.toAccount,
-  });
+class ChargeAmountEvent extends AccountuserEvent {
+  final String receiverCardNumber;
+  final String amount;
+
+  ChargeAmountEvent({required this.receiverCardNumber, required this.amount});
 }

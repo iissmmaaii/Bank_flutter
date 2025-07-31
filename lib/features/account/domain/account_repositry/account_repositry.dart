@@ -3,20 +3,14 @@ import 'package:dartz/dartz.dart';
 
 abstract class AccountRepositry {
   Future<Either<String, UserAccount>> getinfo({required String id});
+
   Future<Either<String, String>> chargeAnotherAccount({
-    required String accountNumer1,
-    required String accountNumer2,
+    required String cardNumber1,
+    required String cardNumber2,
+    required String amount,
   });
-  Future<Either<String, String>> changeName({
-    required int id,
-    required String name,
-  });
-  Future<Either<String, String>> changeNunmber({
-    required int id,
-    required String number,
-  });
-  Future<Either<String, String>> changeEmail({
-    required int id,
-    required String email,
-  });
+
+  Future<Either<String, String>> changeName({required String name});
+  Future<Either<String, String>> changeNunmber({required String number});
+  Future<Either<String, String>> changeEmail({required String email});
 }

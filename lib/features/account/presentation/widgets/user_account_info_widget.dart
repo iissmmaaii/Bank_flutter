@@ -1,10 +1,11 @@
 import 'dart:ui';
 import 'package:bankapp3/features/account/domain/entities/useraccount.dart';
-import 'package:bankapp3/features/twofactorauthfeature/presentation/bloc/twofactorauthfeature_bloc.dart';
+import 'package:bankapp3/features/account/presentation/pages/charge_amount_page.dart';
 import 'package:bankapp3/features/twofactorauthfeature/presentation/pages/googleautpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bankapp3/features/account/presentation/bloc/accountuser_bloc.dart';
+import 'package:bankapp3/features/twofactorauthfeature/presentation/bloc/twofactorauthfeature_bloc.dart';
 
 class UserAccountInfoWidget extends StatelessWidget {
   const UserAccountInfoWidget({super.key});
@@ -86,11 +87,26 @@ class UserAccountInfoWidget extends StatelessWidget {
       case 0:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => const Setup2FAPage()),
+          MaterialPageRoute(
+            builder:
+                (_) => BlocProvider.value(
+                  value: context.read<TwofactorauthfeatureBloc>(),
+                  child: const Setup2FAPage(),
+                ),
+          ),
         );
         break;
       case 1:
-        _showSnackBar(context, 'جاري فتح صفحة تحويل الأموال...');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder:
+                (_) => BlocProvider.value(
+                  value: context.read<AccountuserBloc>(),
+                  child: const ChargeAmountPage(),
+                ),
+          ),
+        );
         break;
       case 2:
         _showSnackBar(context, 'جاري فتح صفحة إضافة الأموال...');
@@ -177,6 +193,14 @@ class UserAccountInfoWidget extends StatelessWidget {
                     Icons.credit_card,
                     '💳 رقم البطاقة',
                     user.cardNumber ?? 'غير متاح',
+                  ),
+                  const Divider(color: Colors.grey, thickness: 1),
+                  _infoRow(
+                    Icons.account_balance_wallet,
+                    'رصيد الحساب:',
+                    (user.money != null && user.money!.isNotEmpty)
+                        ? '${user.money} دولار'
+                        : 'غير متاح',
                   ),
                 ],
               ),

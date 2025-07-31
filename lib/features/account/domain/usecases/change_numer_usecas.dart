@@ -7,10 +7,7 @@ class ChangeNumber {
   final AccountRepositry accountRepositry;
 
   ChangeNumber({required this.accountRepositry});
-  Future<Either<String, String>> execute({
-    required int id,
-    required String number,
-  }) async {
-    return await accountRepositry.changeNunmber(id: id, number: number);
+  Future<Either<String, String>> execute({required String number}) async {
+    return await accountRepositry.changeNunmber(number: number);
   }
 }

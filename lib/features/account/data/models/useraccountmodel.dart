@@ -6,6 +6,7 @@ class UserAccountModel extends UserAccount {
     super.cardNumber, // nullable
     super.phoneNumber, // nullable
     required super.username,
+    required super.money,
   });
 
   factory UserAccountModel.fromJson(Map<String, dynamic> json) {
@@ -13,7 +14,8 @@ class UserAccountModel extends UserAccount {
       id: json['id'] ?? 0,
       cardNumber: json['cardNumber'], // تطابق الحقل
       phoneNumber: json['phoneNumber'], // تطابق الحقل
-      username: json['username'] ?? '', // تطابق الحقل
+      username: json['username'] ?? '',
+      money: json['money'], // تطابق الحقل
     );
   }
 }

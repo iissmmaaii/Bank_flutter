@@ -121,8 +121,18 @@ Future<void> init() async {
   sl.registerLazySingleton(() => ChargeAnotherAcoount(accountRepositry: sl()));
   sl.registerLazySingleton(() => GetInfo(accountRepositry: sl()));
 
-  // Account Bloc
-  sl.registerFactory(() => AccountuserBloc(sl(), sl(), sl(), sl(), sl(), sl()));
+  // Account Bloc (مع إضافة localDataSourceAccount)
+  sl.registerFactory(
+    () => AccountuserBloc(
+      sl(), // changeEmail
+      sl(), // changeName
+      sl(), // changeNumber
+      sl(), // chargeAnotherAcoount
+      sl(), // getInfo
+      sl(), // localDataSource (AuthLocalDataSource)
+      sl(), // localDataSourceAccount (Accountlocaldatasource)
+    ),
+  );
 
   // Alert Bloc
   sl.registerFactory(() => AlertBloc(sl(), sl()));

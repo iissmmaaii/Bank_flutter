@@ -13,11 +13,17 @@ class AccountLoaded extends AccountuserState {
 }
 
 class AccountUpdated extends AccountuserState {
-  final String message; // مثلاً: "Email changed successfully"
+  final String message; // مثل "تم التحديث بنجاح"
   AccountUpdated(this.message);
 }
 
 class AccountError extends AccountuserState {
   final String message;
   AccountError(this.message);
+}
+
+class ChargeSuccess extends AccountuserState {
+  final String message;
+
+  ChargeSuccess(this.message);
 }

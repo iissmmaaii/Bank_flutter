@@ -44,76 +44,81 @@ class AccountRemoteDataSource {
     }
   }
 
-  Future<String> changeName({required int id, required String name}) async {
+  // تغيير الاسم
+  Future<String> changeName({required String name}) async {
     final headers = await headersProvider.getAuthHeaders();
 
     final response = await client.post(
       Uri.parse('$baseUrl/changename'),
       headers: headers,
-      body: jsonEncode({'id': id, 'name': name}),
+      body: jsonEncode({'newName': name}), // ✅ مطابق للباك
     );
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return 'true';
     } else {
-      throw jsonDecode(response.body)['error'];
+      throw jsonDecode(response.body)['message'];
     }
   }
 
-  Future<String> changeNunmber({
-    required int id,
-    required String number,
-  }) async {
-    final headers = await headersProvider.getAuthHeaders();
-
-    final response = await client.post(
-      Uri.parse('$baseUrl/changenunmber'),
-      headers: headers,
-      body: jsonEncode({'id': id, 'nymber': number}),
-    );
-
-    if (response.statusCode == 201) {
-      return 'true';
-    } else {
-      throw jsonDecode(response.body)['error'];
-    }
-  }
-
-  Future<String> changeEmail({required int id, required String email}) async {
+  // تغيير الإيميل
+  Future<String> changeEmail({required String email}) async {
     final headers = await headersProvider.getAuthHeaders();
 
     final response = await client.post(
       Uri.parse('$baseUrl/changeemail'),
       headers: headers,
-      body: jsonEncode({'id': id, 'email': email}),
+      body: jsonEncode({'newEmail': email}), // ✅ مطابق للباك
     );
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return 'true';
     } else {
-      throw jsonDecode(response.body)['error'];
+      throw jsonDecode(response.body)['message'];
     }
   }
 
+  // تغيير الرقم
+  Future<String> changePhoneNumber({required String number}) async {
+    final headers = await headersProvider.getAuthHeaders();
+
+    final response = await client.post(
+      Uri.parse('$baseUrl/changephonenumber'),
+      headers: headers,
+      body: jsonEncode({'newPhoneNumber': number}), // ✅ مطابق للباك
+    );
+
+    if (response.statusCode == 200) {
+      return 'true';
+    } else {
+      throw jsonDecode(response.body)['message'];
+    }
+  }
+
+  // تحويل من حساب لحساب
   Future<String> chargeAnotherAccount({
-    required String accountNumber1,
-    required String accountNumer2,
+    required String cardNumber1,
+    required String cardNumber2,
+    required String amount, // لأنه بيروح كـ string حسب الباك
   }) async {
     final headers = await headersProvider.getAuthHeaders();
 
     final response = await client.post(
-      Uri.parse('$baseUrl/chargeanotheraccount'),
+      Uri.parse('$baseUrl/charge-account'),
       headers: headers,
       body: jsonEncode({
-        'accountnumber1': accountNumber1,
-        'accountnumber2': accountNumer2,
+        'cardNumber1': cardNumber1,
+        'cardNumber2': cardNumber2,
+        'ammount': amount, // ✅ مطابق للباك
       }),
     );
+    print('📥 الاستجابة - الحالة: ${response.statusCode}');
+    print('📥 جسم الاستجابة: ${response.body}');
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return 'true';
     } else {
-      throw jsonDecode(response.body)['error'];
+      throw jsonDecode(response.body)['message'];
     }
   }
 }

@@ -7,10 +7,7 @@ class ChangeEmail {
   final AccountRepositry accountRepositry;
 
   ChangeEmail({required this.accountRepositry});
-  Future<Either<String, String>> execute({
-    required int id,
-    required String email,
-  }) async {
-    return await accountRepositry.changeEmail(id: id, email: email);
+  Future<Either<String, String>> execute({required String email}) async {
+    return await accountRepositry.changeEmail(email: email);
   }
 }

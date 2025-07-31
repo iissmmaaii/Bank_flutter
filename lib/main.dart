@@ -1,4 +1,4 @@
-import 'package:bankapp3/features/account/presentation/pages/account_page.dart';
+import 'package:bankapp3/features/account/presentation/pages/account-page.dart';
 import 'package:bankapp3/features/alert/presentation/bloc/bloc/notification_bloc.dart';
 import 'package:bankapp3/features/alert/presentation/bloc/alert_bloc.dart';
 import 'package:bankapp3/features/alert/presentation/pages/notificationpage.dart';

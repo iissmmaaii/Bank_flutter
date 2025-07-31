@@ -14,7 +14,8 @@ class AccountPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AccountuserBloc>(
-          create: (context) => sl<AccountuserBloc>()..add(GetAccountInfoEvent()),
+          create:
+              (context) => sl<AccountuserBloc>()..add(GetAccountInfoEvent()),
         ),
         BlocProvider<TwofactorauthfeatureBloc>(
           create: (context) => sl<TwofactorauthfeatureBloc>(),

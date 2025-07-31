@@ -18,13 +18,10 @@ class Accountrepositoryimp implements AccountRepositry {
   });
 
   @override
-  Future<Either<String, String>> changeEmail({
-    required int id,
-    required String email,
-  }) async {
+  Future<Either<String, String>> changeEmail({required String email}) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.changeEmail(id: id, email: email);
+        final result = await remoteDataSource.changeEmail(email: email);
         return Right(result);
       } on ServerEcception {
         return Left('Server error occurred');
@@ -35,13 +32,10 @@ class Accountrepositoryimp implements AccountRepositry {
   }
 
   @override
-  Future<Either<String, String>> changeName({
-    required int id,
-    required String name,
-  }) async {
+  Future<Either<String, String>> changeName({required String name}) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.changeName(id: id, name: name);
+        final result = await remoteDataSource.changeName(name: name);
         return Right(result);
       } on ServerEcception {
         return Left('Server error occurred');
@@ -52,16 +46,10 @@ class Accountrepositoryimp implements AccountRepositry {
   }
 
   @override
-  Future<Either<String, String>> changeNunmber({
-    required int id,
-    required String number,
-  }) async {
+  Future<Either<String, String>> changeNunmber({required String number}) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.changeNunmber(
-          id: id,
-          number: number,
-        );
+        final result = await remoteDataSource.changePhoneNumber(number: number);
         return Right(result);
       } on ServerEcception {
         return Left('Server error occurred');
@@ -73,14 +61,16 @@ class Accountrepositoryimp implements AccountRepositry {
 
   @override
   Future<Either<String, String>> chargeAnotherAccount({
-    required String accountNumer1,
-    required String accountNumer2,
+    required String cardNumber1,
+    required String cardNumber2,
+    required String amount,
   }) async {
     if (await networkInfo.isConnected) {
       try {
         final result = await remoteDataSource.chargeAnotherAccount(
-          accountNumber1: accountNumer1,
-          accountNumer2: accountNumer2,
+          cardNumber1: cardNumber1,
+          cardNumber2: cardNumber2,
+          amount: amount,
         );
         return Right(result);
       } on ServerEcception {

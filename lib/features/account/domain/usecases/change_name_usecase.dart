@@ -7,10 +7,7 @@ class ChangeName {
   final AccountRepositry accountRepositry;
 
   ChangeName({required this.accountRepositry});
-  Future<Either<String, String>> execute({
-    required int id,
-    required String name,
-  }) async {
-    return await accountRepositry.changeName(id: id, name: name);
+  Future<Either<String, String>> execute({required String name}) async {
+    return await accountRepositry.changeName(name: name);
   }
 }

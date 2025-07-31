@@ -25,6 +25,8 @@ class Accountlocaldatasource {
         value: info.phoneNumber?.toString() ?? '',
       );
       await _storage.write(key: 'user_name', value: info.username);
+      await _storage.write(key: 'user_money', value: info.money);
+
       return unit;
     } catch (e) {
       throw EmptyCacheException(
@@ -40,8 +42,11 @@ class Accountlocaldatasource {
       final card = await _storage.read(key: 'card_number') ?? '';
       final phone = await _storage.read(key: 'phone_number') ?? '';
       final name = await _storage.read(key: 'user_name') ?? '';
+      final money = await _storage.read(key: 'user_money') ?? '';
 
-      print('🔍 القيم المستخرجة: id=$id, card=$card, phone=$phone, name=$name');
+      print(
+        '🔍 القيم المستخرجة: id=$id, card=$card, phone=$phone, name=$name,money=$money',
+      );
 
       if (name.isEmpty) {
         throw EmptyCacheException(message: 'No user name found in cache');
@@ -53,10 +58,22 @@ class Accountlocaldatasource {
         phoneNumber:
             phone.isEmpty ? null : phone, // تحويل إلى null إذا كان فارغ
         username: name,
+        money: money,
       );
     } catch (e) {
       throw EmptyCacheException(
         message: 'Failed to get cached user info: ${e.toString()}',
+      );
+    }
+  }
+
+  Future<String?> getCardNumber() async {
+    try {
+      final cardNumber = await _storage.read(key: 'card_number');
+      return cardNumber;
+    } catch (e) {
+      throw EmptyCacheException(
+        message: 'Failed to get card number: ${e.toString()}',
       );
     }
   }
